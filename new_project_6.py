@@ -242,7 +242,8 @@ class AlgorithmVisualizer:
         elif algorithm == "Merge Sort":
             merge_sort(self, 0, len(self.data) - 1)
         elif algorithm == "Selection Sort":
-            selection_sort(self, self.data, self.root)
+            self.code_display.load_code(SELECTION_SORT)
+            selection_sort(self, self.data, self.root , self.code_display)
 
     def run_searching(self, algorithm):
         if algorithm == "Linear Search":
