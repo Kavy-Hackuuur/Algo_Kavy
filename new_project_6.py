@@ -8,6 +8,8 @@ import time
 import networkx as nx
 from sorting import *
 from searching import *
+from code_display import CodeDisplay
+from algo import *
 
 class AlgorithmVisualizer:
     def __init__(self, root):
@@ -22,7 +24,7 @@ class AlgorithmVisualizer:
         self.graph = None
         self.graph_positions = None
         self.data = []
-
+                                
         # UI Elements
         self.create_widgets()
         self.update_ui()
@@ -83,12 +85,19 @@ class AlgorithmVisualizer:
         self.speed_scale.grid(row=1, column=6, padx=10, pady=5)
 
         # Visualization Frame
-        self.canvas_frame = ttk.Frame(self.root)
-        self.canvas_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        main_frame = ttk.Frame(self.root)
+        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+
+        # Plot Canvas
+        self.canvas_frame = ttk.Frame(main_frame)
+        self.canvas_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
         self.figure, self.ax = plt.subplots()
         self.canvas = FigureCanvasTkAgg(self.figure, self.canvas_frame)
         self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+
+        # Code Display
+        self.code_display = CodeDisplay(main_frame)
 
         self.type_combo.bind("<<ComboboxSelected>>", self.update_ui)
 
@@ -224,10 +233,12 @@ class AlgorithmVisualizer:
             thread.start()
 
     def run_sorting(self, algorithm):
-        if algorithm == "Bubble Sort":
-            bubble_sort(self, self.data, self.root)
-        elif algorithm == "Insertion Sort":
-            insertion_sort(self, self.data, self.root)
+        if algorithm == "Bubble Sort":  
+            self.code_display.load_code(BUBBLE_SORT)
+            bubble_sort(self, self.data, self.root , self.code_display)
+        elif algorithm == "Insertion Sort":          
+            self.code_display.load_code(INSERTION_SORT)
+            insertion_sort(self, self.data, self.root , self.code_display)
         elif algorithm == "Merge Sort":
             merge_sort(self, 0, len(self.data) - 1)
         elif algorithm == "Selection Sort":
