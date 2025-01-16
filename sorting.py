@@ -10,21 +10,29 @@ def insertion_sort(self , data , root , code_display):
     n = len(data)
     t = int(1/self.speed) * 250
 
+    code_display.highlight_line(1)
+    root.after(t)
+
     for i in range(1, n):
-        if not self.running:
-            break
 
         code_display.highlight_line(1)
         root.after(t)
 
-        key = data[i]
+        if not self.running:
+            break
+
 
         code_display.highlight_line(2)
         root.after(t)
 
-        j = i - 1
-        
+        key = data[i]
+
         code_display.highlight_line(3)
+        root.after(t)
+        
+        j = i - 1
+
+        code_display.highlight_line(4)
         root.after(t)
 
         while j >= 0 and key < data[j]:
@@ -39,16 +47,19 @@ def insertion_sort(self , data , root , code_display):
             root.update_idletasks()
             time.sleep(1 / self.speed)
 
-            data[j + 1] = data[j]
-
             code_display.highlight_line(5)
             root.after(t)
 
-            j -= 1
-        data[j + 1] = key
+            data[j + 1] = data[j]
 
-        code_display.highlight_line(6)
+            code_display.highlight_line(6)
+            root.after(t)
+            j -= 1
+
+        code_display.highlight_line(7)
         root.after(t)
+
+        data[j + 1] = key
 
     self.update_plot(data, ["green"] * n)
 
@@ -56,33 +67,44 @@ def bubble_sort(self , data , root , code_display):
     n = len(data)
     t = int(1/self.speed) * 250
 
+    code_display.highlight_line(1)
+    root.after(t)
+
     for i in range(n):
-        if not self.running:
-            break
 
         code_display.highlight_line(1)
         root.after(t)
 
+        if not self.running:
+            break
+
+
+        code_display.highlight_line(2)
+        root.after(t)
+
         for j in range(n - i - 1):
-            if not self.running:
-                break
 
             code_display.highlight_line(2)
             root.after(t)
+
+            if not self.running:
+                break
+
 
             self.update_plot(self.data, ["red" if x == j or x == j+1 else "blue" for x in range(n)])
             root.update_idletasks()
             time.sleep(1 / self.speed)
 
+            code_display.highlight_line(3)
+            root.after(t)
+
             if data[j] > data[j + 1]:
 
-                code_display.highlight_line(3)
-                root.after(t)
-
-                data[j], data[j + 1] = data[j + 1], data[j]
 
                 code_display.highlight_line(4)
                 root.after(t)
+
+                data[j], data[j + 1] = data[j + 1], data[j]
 
     self.update_plot(data, ["green"] * n)
 
@@ -90,40 +112,53 @@ def selection_sort(self , data , root , code_display):
     n = len(data)
     t = int(1/self.speed) * 250
 
+    code_display.highlight_line(1)
+    root.after(t)
+
     for i in range(n):
-        if not self.running:
-            break
 
         code_display.highlight_line(1)
         root.after(t)
 
-        min_idx = i
+        if not self.running:
+            break
 
         code_display.highlight_line(2)
         root.after(t)
 
+        min_idx = i
+
+        code_display.highlight_line(3)
+        root.after(t)
+
         for j in range(i + 1, n):
-            if not self.running:
-                break
 
             code_display.highlight_line(3)
             root.after(t)
+            
+            if not self.running:
+                break
 
             self.update_plot(data, ["red" if x == j or x == min_idx else "blue" for x in range(n)])
             root.update_idletasks()
             time.sleep(1 / self.speed)
 
+            code_display.highlight_line(4)
+            root.after(t)
+
+
             if self.data[j] < data[min_idx]:
                 
-                code_display.highlight_line(4)
-                root.after(t)
-                
-                min_idx = j
-
                 code_display.highlight_line(5)
                 root.after(t)
 
+                min_idx = j
+
+        code_display.highlight_line(6)
+        root.after(t)
+
         data[i], data[min_idx] = data[min_idx], data[i]
+
     self.update_plot(data, ["green"] * n)
 
 def merge_sort(self , left, right):
