@@ -4,14 +4,16 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import random
 import threading
-import time
+# import time
 import networkx as nx
 from sorting import *
 from searching import *
+from graph_traversal import *
 from code_display import CodeDisplay
 from algo import *
 
 class AlgorithmVisualizer:
+    
     def __init__(self, root):
         self.root = root
         self.root.title("Algorithm Visualizer")
@@ -35,54 +37,62 @@ class AlgorithmVisualizer:
         header_frame.pack(fill=tk.X, pady=10)
 
         ttk.Label(header_frame, text="Algorithm Visualizer", font=("Helvetica", 20, "bold")).pack()
-
         # Control Frame
         control_frame = ttk.Frame(self.root)
         control_frame.pack(fill=tk.X, pady=10)
 
         self.type_label = ttk.Label(control_frame, text="Select Type:")
-        self.type_label.grid(row=0, column=0, padx=10, pady=5)
+        self.type_label.grid(row=0, column=0)
 
         self.type_combo = ttk.Combobox(control_frame, values=["Sorting", "Searching", "Graph Traversal"], state="readonly")
-        self.type_combo.grid(row=0, column=1, padx=10, pady=5)
+        self.type_combo.grid(padx=10, pady=10, ipadx=5, ipady=10)
+        self.type_combo.grid(row=0, column=1)
         self.type_combo.current(0)
 
         self.algorithm_label = ttk.Label(control_frame, text="Select Algorithm:")
-        self.algorithm_label.grid(row=0, column=2, padx=10, pady=5)
+        self.algorithm_label.grid(row=0, column=2)
 
         self.algorithm_combo = ttk.Combobox(control_frame, values=[], state="readonly")
-        self.algorithm_combo.grid(row=0, column=3, padx=10, pady=5)
+        self.algorithm_combo.grid(padx=10, pady=10, ipadx=10, ipady=10)
+        self.algorithm_combo.grid(row=0, column=3)
 
         self.run_button = ttk.Button(control_frame, text="Run", command=self.start_algorithm)
-        self.run_button.grid(row=0, column=4, padx=10, pady=5)
+        self.run_button.grid(padx=10, pady=10, ipadx=10, ipady=10)
+        self.run_button.grid(row=0, column=4,)
 
         self.stop_button = ttk.Button(control_frame, text="Stop", command=self.stop_algorithm)
-        self.stop_button.grid(row=0, column=5, padx=10, pady=5)
+        self.stop_button.grid(padx=10, pady=10, ipadx=10, ipady=10)
+        self.stop_button.grid(row=0, column=5)
 
         self.reset_button = ttk.Button(control_frame, text="Reset", command=self.reset)
-        self.reset_button.grid(row=0, column=6, padx=10, pady=5)
+        self.reset_button.grid(padx=10, pady=10, ipadx=10, ipady=10)
+        self.reset_button.grid(row=0, column=6)
 
         self.generate_button = ttk.Button(control_frame, text="Generate", command=self.generate_data)
-        self.generate_button.grid(row=1, column=4, padx=10, pady=5)
+        self.generate_button.grid(padx=10, pady=10, ipadx=10, ipady=10)
+        self.generate_button.grid(row=0, column=11)
 
         self.data_label = ttk.Label(control_frame, text="Input Size:")
-        self.data_label.grid(row=1, column=0, padx=10, pady=5)
+        self.data_label.grid(padx=10, pady=10, ipadx=10, ipady=10)
+        self.data_label.grid(row=0, column=7)
 
         self.data_size_spinbox = ttk.Spinbox(control_frame, from_=5, to=50, increment=1)
-        self.data_size_spinbox.grid(row=1, column=1, padx=10, pady=5)
+        self.data_size_spinbox.grid(row=0, column=8)
 
         self.target_label = ttk.Label(control_frame, text="Target Value:")
-        self.target_label.grid(row=1, column=2, padx=10, pady=5)
+        self.target_label.grid(padx=10, pady=10, ipadx=10, ipady=10)
+        self.target_label.grid(row=0, column=9)
 
         self.target_entry = ttk.Entry(control_frame)
-        self.target_entry.grid(row=1, column=3, padx=10, pady=5)
+        self.target_entry.grid(row=0, column=10)
 
         self.speed_label = ttk.Label(control_frame, text="Speed (1x - 5x):")
-        self.speed_label.grid(row=1, column=5, padx=10, pady=5)
+        self.speed_label.grid(padx=10, pady=10, ipadx=10, ipady=10)
+        self.speed_label.grid(row=0, column=12)
 
         self.speed_scale = ttk.Scale(control_frame, from_=1, to=5, orient="horizontal", command=self.update_speed)
         self.speed_scale.set(1)
-        self.speed_scale.grid(row=1, column=6, padx=10, pady=5)
+        self.speed_scale.grid(row=0, column=13)
 
         # Visualization Frame
         main_frame = ttk.Frame(self.root)
@@ -164,46 +174,6 @@ class AlgorithmVisualizer:
         self.ax.set_ylim(0, max(data) + 10)
         self.canvas.draw()
 
-    def bfs(self, start_node, target_value):
-        visited = set()
-        queue = [start_node]
-
-        while queue and self.running:
-            current = queue.pop(0)
-            if current in visited:
-                continue
-            visited.add(current)
-            self.update_graph_plot(current, target_value)
-            time.sleep(1 / self.speed)
-
-            if self.graph.nodes[current]['value'] == target_value:
-                self.update_graph_plot(current, target_value, found=True)
-                return
-
-            queue.extend(neighbor for neighbor in self.graph.neighbors(current) if neighbor not in visited)
-
-        self.update_graph_plot(found=False)
-
-    def dfs(self, current, target_value, visited=None):
-        if visited is None:
-            visited = set()
-        if current in visited or not self.running:
-            return
-
-        visited.add(current)
-        self.update_graph_plot(current, target_value)
-        time.sleep(1 / self.speed)
-
-        if self.graph.nodes[current]['value'] == target_value:
-            self.update_graph_plot(current, target_value, found=True)
-            return
-
-        for neighbor in self.graph.neighbors(current):
-            self.dfs(neighbor, target_value, visited)
-
-        if current == 0 and not self.running:
-            self.update_graph_plot(found=False)
-
     def start_algorithm(self):
         if not self.running:
             self.running = True
@@ -225,33 +195,49 @@ class AlgorithmVisualizer:
                     self.target_value = None
                     messagebox.showerror("Error", "Please enter a valid integer for the target value.")
                     return
-                start_node = random.choice(list(self.graph.nodes))
-                if algorithm == "BFS":
-                    thread = threading.Thread(target=self.bfs, args=(start_node, self.target_value))
-                elif algorithm == "DFS":
-                    thread = threading.Thread(target=self.dfs, args=(start_node, self.target_value))
+                thread = threading.Thread(target=self.run_graph_traversal, args=(algorithm,))
             thread.start()
+
+    def run_graph_traversal(self , algorithm):
+        start_node = random.choice(list(self.graph.nodes))
+        if algorithm == "BFS":
+            bfs(self , start_node , self.target_value)
+            self.stop_algorithm()
+        elif algorithm == "DFS":
+            dfs(self , start_node , self.target_value)
+            self.stop_algorithm()
 
     def run_sorting(self, algorithm):
         if algorithm == "Bubble Sort":  
             self.code_display.load_code(BUBBLE_SORT)
             bubble_sort(self, self.data, self.root , self.code_display)
+            self.stop_algorithm()
         elif algorithm == "Insertion Sort":          
             self.code_display.load_code(INSERTION_SORT)
             insertion_sort(self, self.data, self.root , self.code_display)
+            self.stop_algorithm()
         elif algorithm == "Merge Sort":
+            self.code_display.load_code(MERGE_SORT)
             merge_sort(self, 0, len(self.data) - 1)
+            self.stop_algorithm()
         elif algorithm == "Selection Sort":
             self.code_display.load_code(SELECTION_SORT)
             selection_sort(self, self.data, self.root , self.code_display)
+            self.stop_algorithm()
 
     def run_searching(self, algorithm):
         if algorithm == "Linear Search":
-            linear_search(self, self.data, self.root)
+            self.code_display.load_code(LINEAR_SEARCH)
+            linear_search(self, self.data, self.root , self.code_display)
+            self.stop_algorithm()
         elif algorithm == "Binary Search":
-            binary_search(self, self.data, self.root)
+            self.code_display.load_code(BINARY_SEARCH)
+            binary_search(self, self.data, self.root , self.code_display)
+            self.stop_algorithm()
         elif algorithm == "Jump Search":
-            jump_search(self, self.data, self.root)
+            self.code_display.load_code(JUMP_SEARCH)
+            jump_search(self, self.data, self.root, self.code_display)
+            self.stop_algorithm()
 
     def stop_algorithm(self):
         self.running = False
@@ -271,3 +257,4 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = AlgorithmVisualizer(root)
     root.mainloop()
+    
