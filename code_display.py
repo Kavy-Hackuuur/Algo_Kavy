@@ -2,7 +2,7 @@ import tkinter as tk
 
 class CodeDisplay:
     def __init__(self, parent):
-        self.text_widget = tk.Text(parent, wrap=tk.WORD, state=tk.DISABLED, font=("Courier", 12))
+        self.text_widget = tk.Text(parent, wrap=tk.WORD, state=tk.DISABLED, font=("Courier", 20))
         self.text_widget.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
     
     def load_code(self, code_lines):
