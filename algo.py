@@ -1,4 +1,5 @@
 INSERTION_SORT = [
+"Insertion Sort Algorithm:-",
 "for j <- 2 to n:",
 "    key <- Arr[j]",
 "    i <- j - 1",
@@ -9,6 +10,7 @@ INSERTION_SORT = [
 ]
 
 BUBBLE_SORT = [
+"Bubble Sort Algorithm:-",
 "for i <- 1 to n:",
 "    for j <- 1 to n - i:",
 "        if Arr[j] > Arr[j + 1]:",
@@ -16,6 +18,7 @@ BUBBLE_SORT = [
 ]
 
 SELECTION_SORT = [
+"Selection Sort Algorithm:-",
 "for i <- 1 to n - 1:"
 "    min <- i",
 "    for j <- i + 1 to n:",
