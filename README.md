@@ -88,4 +88,4 @@ Designed to make algorithms more approachable:
 
 ## 👨‍💻 Authors & Contributors
 
-- Original development by Dron , Krish , Rajvi and Kunj
+- Development by Dron , Krish , Rajvi and Kunj
